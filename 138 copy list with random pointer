@@ -1,0 +1,39 @@
+class Solution {
+    public Node copyRandomList(Node head) {
+        if (head == null) return null;
+
+        // Step 1: Create new nodes and insert them after each original node
+        Node curr = head;
+        while (curr != null) {
+            Node newNode = new Node(curr.val);
+            newNode.next = curr.next;
+            curr.next = newNode;
+            curr = newNode.next;
+        }
+
+        // Step 2: Assign random pointers for the cloned nodes
+        curr = head;
+        while (curr != null) {
+            if (curr.random != null) {
+                curr.next.random = curr.random.next;
+            }
+            curr = curr.next.next;
+        }
+
+        // Step 3: Separate the cloned list from the original list
+        curr = head;
+        Node newHead = head.next;
+        Node copy = newHead;
+
+        while (curr != null) {
+            curr.next = curr.next.next;
+            if (copy.next != null) {
+                copy.next = copy.next.next;
+            }
+            curr = curr.next;
+            copy = copy.next;
+        }
+
+        return newHead;
+    }
+}
