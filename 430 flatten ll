@@ -1,0 +1,41 @@
+class Solution {
+    public Node flatten(Node head) {
+        if (head == null) return head;
+        flattenDFS(head);
+        return head;
+    }
+    
+    private Node flattenDFS(Node node) {
+        Node curr = node;
+        Node last = null;
+        
+        while (curr != null) {
+            Node nextNode = curr.next;
+            
+            // If the current node has a child
+            if (curr.child != null) {
+                // Recursively flatten the child list
+                Node childTail = flattenDFS(curr.child);
+                
+                // Store original next
+                curr.next = curr.child;
+                curr.child.prev = curr;
+                curr.child = null;
+                
+                // Connect child's tail to nextNode
+                if (nextNode != null) {
+                    childTail.next = nextNode;
+                    nextNode.prev = childTail;
+                }
+                
+                last = childTail;
+            } else {
+                last = curr;
+            }
+            
+            curr = nextNode;
+        }
+        
+        return last;
+    }
+}
